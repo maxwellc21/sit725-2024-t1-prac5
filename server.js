@@ -1,9 +1,11 @@
+const path = require('path')
 const express = require('express');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
+const connectDB = require('./dbconnection');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const routes = require('./routes/index');
-const path = require('path')
+
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -11,13 +13,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://rootuser:WZqD1gPKvGm1THS9@restapi.ipm2yta.mongodb.net/RestAPI")
-  .then(() => {
-    console.log("connected");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+connectDB();
 
 app.use('/', routes); // Use routes defined in index.js
 

@@ -1,8 +1,8 @@
-const Card = require('../models/card');
+const cardService = require('../services/cardService');
 
 const getCards = async (req, res) => {
   try {
-    const cards = await Card.find({});
+    const cards = await cardService.getCards();
     res.render('index', {
       cardLists: cards
     });
@@ -12,14 +12,14 @@ const getCards = async (req, res) => {
   }
 };
 
-const createCard = (req, res) => {
-  let newCard = new Card({
-    title: req.body.title,
-    content: req.body.content,
-    imageURL: req.body.image
-  });
-  newCard.save();
-  res.redirect("/");
+const createCard = async (req, res) => {
+  try {
+    await cardService.createCard(req.body.title, req.body.content, req.body.image);
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
 module.exports = {
